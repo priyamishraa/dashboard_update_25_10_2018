@@ -1,6 +1,7 @@
 import pymysql
 from datetime import datetime,timedelta
 
+#get startdate and enddate in datetime.datetime format
 class getdaterange():
     def __init__(self):
         self.date = ""
@@ -11,22 +12,26 @@ class getdaterange():
         date2 =  date1 - timedelta(days=1)
         return [date1,date2]
 
-
+#get all the details from sql for dashboard
 class getdetails():
     def __init__(self,order):
         self.order = order
         self.data = []
-        
+    
+    #main function (startdate, starttime, enddate, endtime)
     def get_details(self,p1,value1,p2,value2):
-        p1=p1.replace(hour=value1[0], minute=value1[1], second=value1[2])
-        p2=p2.replace(hour=value2[0], minute=value2[1], second=value2[2])
-        
+        p1=p1.replace(hour=value1[0], minute=value1[1], second=value1[2]) #startdate
+        p2=p2.replace(hour=value2[0], minute=value2[1], second=value2[2]) #enddate
+        #calling function for fetching job from sql
         self.data = self.job_fetching_ascending(p1,p2)
+        #calling function for framing data from fetched jobs
         b = self.framing_data()
+        #calling function for fetching action to be performed on jobs
         #a = self.Action_fetching(p1,p2)
         #c = {**b,**a}
         return b
     
+    #function fetches data from sql in sort order passed
     def job_fetching_ascending(self,date1,date2):
         try:
             order = self.order
@@ -50,7 +55,8 @@ class getdetails():
         finally:
             cursor.close()
             db.close()   
-
+    
+    #function frames the fetched data from job_fetching_ascending function in dictionary form
     def framing_data(self):
         a = self.data
         d = {}
@@ -70,7 +76,8 @@ class getdetails():
                 b +=1
         #print(d)
         return d
-        
+    
+    #funnction fetches data from Action_tracker database
     def Action_fetching(self,date1,date2):
         try:
             db = pymysql.connect(host="localhost",user="root",password="root",db = "dashboard")
@@ -101,6 +108,7 @@ class getdetails():
             cursor.close()
             db.close()
 
+#adds new user to the user_details database
 #class adding_user(object):
 #    def __init__(self, username, password, a):
 #        self.username = username
@@ -122,6 +130,7 @@ class getdetails():
 #            c.close()
 #            db.close()
 #
+#class fetches data from user_details database
 #class fetch(object):
 #    def fetching():
 #        try:
