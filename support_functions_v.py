@@ -102,7 +102,7 @@ class getdetails():
             db.close()
 
 #class adding_user(object):
-#    def __init__(self, username, password, a):
+    def __init__(self, username, password, a):
 #        self.username = username
 #        self.password = password
 #        self.a = a
